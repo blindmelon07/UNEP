@@ -13,6 +13,10 @@
     "dependencies": {
         "@inertiajs/react": "^3.0.0",
         "@inertiajs/vite": "^3.0.0",
+        "@photo-sphere-viewer/core": "^5.15.1",
+        "@photo-sphere-viewer/markers-plugin": "^5.15.1",
+        "@photo-sphere-viewer/virtual-tour-plugin": "^5.15.1",
+        "@photo-sphere-viewer/visible-range-plugin": "^5.15.1",
         "@tailwindcss/vite": "^4.1.11",
         "@types/react": "^19.2.0",
         "@types/react-dom": "^19.2.0",

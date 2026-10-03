@@ -1,8 +1,11 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import type { Photo } from '@/components/photo-gallery';
 import { PhotoGallery } from '@/components/photo-gallery';
 import { RoomTypeCard } from '@/components/room-type-card';
 import { StaySearchForm } from '@/components/stay-search-form';
+import { buttonClasses } from '@/components/ui/button';
+import { roomTypeTourStops } from '@/lib/hotel-tour';
+import { tour } from '@/routes';
 import type { RoomType } from '@/types';
 
 const hotelPhotos: Photo[] = [
@@ -113,18 +116,46 @@ export default function Home({ roomTypes }: { roomTypes: RoomType[] }) {
                             key={roomType.id}
                             roomType={roomType}
                             index={index}
+                            footer={
+                                roomTypeTourStops[roomType.slug] && (
+                                    <Link
+                                        href={tour.url({
+                                            query: {
+                                                start: roomTypeTourStops[
+                                                    roomType.slug
+                                                ],
+                                            },
+                                        })}
+                                        className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-700 hover:text-brand-900"
+                                    >
+                                        Walk through this room
+                                        <span aria-hidden>→</span>
+                                    </Link>
+                                )
+                            }
                         />
                     ))}
                 </div>
             </section>
 
             <section className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
-                <h2 className="text-2xl font-semibold tracking-tight">
-                    Take a look around
-                </h2>
-                <p className="mt-1 text-slate-600">
-                    Tap a photo to see it full size.
-                </p>
+                <div className="flex flex-wrap items-end justify-between gap-4">
+                    <div>
+                        <h2 className="text-2xl font-semibold tracking-tight">
+                            Take a look around
+                        </h2>
+                        <p className="mt-1 text-slate-600">
+                            Tap a photo to see it full size, or walk through the
+                            hotel room by room.
+                        </p>
+                    </div>
+                    <Link
+                        href={tour.url()}
+                        className={buttonClasses({ className: 'bg-brand-800' })}
+                    >
+                        Start the virtual tour
+                    </Link>
+                </div>
                 <PhotoGallery photos={hotelPhotos} className="mt-8" />
             </section>
 

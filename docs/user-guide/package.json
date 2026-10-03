@@ -1,0 +1,12 @@
+{
+    "name": "unep-hotel-user-guide",
+    "private": true,
+    "description": "Screenshot capture and Word builder for the UNEP Hotel user guide. Kept separate from the app's dependencies.",
+    "scripts": {
+        "capture": "node capture.mjs",
+        "build": "node build.cjs"
+    },
+    "dependencies": {
+        "docx": "^9.8.1"
+    }
+}

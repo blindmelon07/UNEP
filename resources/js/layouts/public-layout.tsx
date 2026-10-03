@@ -2,7 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { BrandCrest } from '@/components/brand-crest';
 import { FlashMessages } from '@/components/flash-messages';
-import { home, login } from '@/routes';
+import { home, login, tour } from '@/routes';
 import { dashboard } from '@/routes/admin';
 import { index as bookingIndex } from '@/routes/booking';
 
@@ -29,6 +29,12 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                         </span>
                     </Link>
                     <nav className="flex shrink-0 items-center gap-1 text-sm sm:gap-4">
+                        <Link
+                            href={tour.url()}
+                            className="hidden px-2 py-2 font-medium text-brand-800 hover:text-brand-950 sm:inline"
+                        >
+                            Virtual tour
+                        </Link>
                         <Link
                             href={bookingIndex.url()}
                             className="rounded-lg bg-brand-800 px-3.5 py-2 font-medium text-white hover:bg-brand-900"
