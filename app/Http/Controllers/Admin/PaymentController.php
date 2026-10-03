@@ -24,6 +24,12 @@ class PaymentController extends Controller
             'reference' => ['nullable', 'string', 'max:100'],
         ]);
 
+        if ($reservation->status->isClosed()) {
+            Inertia::flash('error', 'This reservation is closed; its folio can no longer change.');
+
+            return back();
+        }
+
         $reservation->payments()->create([
             ...$validated,
             'received_by' => $request->user()->id,
@@ -36,10 +42,16 @@ class PaymentController extends Controller
     }
 
     /**
-     * Void a payment entered by mistake.
+     * Void a payment entered by mistake, while the stay is still open.
      */
     public function destroy(Payment $payment): RedirectResponse
     {
+        if ($payment->reservation->status->isClosed()) {
+            Inertia::flash('error', 'Payments on a closed reservation cannot be voided.');
+
+            return back();
+        }
+
         $payment->delete();
 
         Inertia::flash('success', 'Payment removed.');

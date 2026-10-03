@@ -31,4 +31,12 @@ enum ReservationStatus: string
     {
         return in_array($this, [self::Pending, self::Confirmed], true);
     }
+
+    /**
+     * Determine whether the stay is over, so its folio must no longer change.
+     */
+    public function isClosed(): bool
+    {
+        return in_array($this, [self::CheckedOut, self::Cancelled], true);
+    }
 }

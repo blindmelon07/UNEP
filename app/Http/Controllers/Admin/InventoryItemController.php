@@ -109,10 +109,16 @@ class InventoryItemController extends Controller
     }
 
     /**
-     * Delete an item and its movement history.
+     * Delete an item and its movement history, unless it was used on maintenance work.
      */
     public function destroy(InventoryItem $inventoryItem): RedirectResponse
     {
+        if ($inventoryItem->movements()->whereNotNull('maintenance_request_id')->exists()) {
+            Inertia::flash('error', 'This item was used on maintenance work orders, so its history must be kept.');
+
+            return back();
+        }
+
         $inventoryItem->delete();
 
         Inertia::flash('success', 'Item deleted.');

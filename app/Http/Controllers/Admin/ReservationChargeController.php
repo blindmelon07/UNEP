@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\ReservationStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\ReservationCharge;
@@ -22,7 +21,7 @@ class ReservationChargeController extends Controller
             'amount' => ['required', 'numeric', 'min:0.01', 'max:9999999'],
         ]);
 
-        if (in_array($reservation->status, [ReservationStatus::CheckedOut, ReservationStatus::Cancelled], true)) {
+        if ($reservation->status->isClosed()) {
             Inertia::flash('error', 'Charges cannot be added to a closed reservation.');
 
             return back();
@@ -36,10 +35,16 @@ class ReservationChargeController extends Controller
     }
 
     /**
-     * Remove an extra charge.
+     * Remove an extra charge, while the stay is still open.
      */
     public function destroy(ReservationCharge $charge): RedirectResponse
     {
+        if ($charge->reservation->status->isClosed()) {
+            Inertia::flash('error', 'Charges on a closed reservation cannot be removed.');
+
+            return back();
+        }
+
         $charge->delete();
 
         Inertia::flash('success', 'Charge removed.');

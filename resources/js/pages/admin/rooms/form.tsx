@@ -20,6 +20,8 @@ type Props = {
 };
 
 export default function RoomForm({ room, roomTypes, statuses }: Props) {
+    const isOccupied = room?.status === 'occupied';
+
     return (
         <>
             <PageHeader
@@ -90,12 +92,33 @@ export default function RoomForm({ room, roomTypes, statuses }: Props) {
                                 label="Status"
                                 htmlFor="status"
                                 error={errors.status}
+                                hint={
+                                    isOccupied
+                                        ? 'A guest is checked in. Check them out to change the status.'
+                                        : 'Rooms become occupied only through check-in.'
+                                }
                             >
+                                {isOccupied && (
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="occupied"
+                                    />
+                                )}
                                 <Select
                                     id="status"
-                                    name="status"
-                                    options={statuses}
+                                    name={isOccupied ? undefined : 'status'}
+                                    options={
+                                        isOccupied
+                                            ? statuses
+                                            : statuses.filter(
+                                                  (status) =>
+                                                      status.value !==
+                                                      'occupied',
+                                              )
+                                    }
                                     defaultValue={room?.status ?? 'available'}
+                                    disabled={isOccupied}
                                 />
                             </Field>
                             <Field

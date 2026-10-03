@@ -2,6 +2,8 @@
 
 use App\Enums\Role;
 use App\Models\InventoryItem;
+use App\Models\MaintenanceRequest;
+use App\Models\StockMovement;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -55,6 +57,19 @@ it('records opening stock as the first movement of a new item', function () {
 
     $this->assertDatabaseHas('inventory_items', ['sku' => 'SKU-NEW', 'quantity' => 50]);
     $this->assertDatabaseHas('stock_movements', ['quantity' => 50, 'balance_after' => 50, 'notes' => 'Opening stock']);
+});
+
+it('keeps items whose stock was used on maintenance work', function () {
+    StockMovement::factory()->for($this->item, 'item')->for(MaintenanceRequest::factory())->create([
+        'type' => 'out',
+        'quantity' => -1,
+        'balance_after' => 19,
+    ]);
+
+    $response = $this->actingAs(User::factory()->admin()->create())->delete(route('admin.inventory-items.destroy', $this->item));
+
+    $response->assertInertiaFlash('error', 'This item was used on maintenance work orders, so its history must be kept.');
+    $this->assertModelExists($this->item);
 });
 
 it('filters the list to items at or below their reorder level', function () {

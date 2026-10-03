@@ -1,12 +1,15 @@
 <?php
 
+use App\Enums\EmployeeStatus;
 use App\Enums\MaintenanceStatus;
 use App\Enums\Role;
 use App\Enums\RoomStatus;
+use App\Models\Employee;
 use App\Models\InventoryItem;
 use App\Models\MaintenanceRequest;
 use App\Models\Room;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->engineer = User::factory()->role(Role::Maintenance)->create();
@@ -77,6 +80,16 @@ it('keeps the room out of order while another blocking request is still open', f
     ]);
 
     expect($room->refresh()->status)->toBe(RoomStatus::Maintenance);
+});
+
+it('keeps an assignee who is now on leave selectable when editing', function () {
+    $onLeave = Employee::factory()->create(['status' => EmployeeStatus::OnLeave]);
+    $request = MaintenanceRequest::factory()->create(['assigned_to' => $onLeave->id]);
+
+    $response = $this->actingAs($this->engineer)->get(route('admin.maintenance-requests.edit', $request));
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('employees', fn ($employees) => collect($employees)->contains('id', $onLeave->id)));
 });
 
 it('requires either a room or a location', function () {

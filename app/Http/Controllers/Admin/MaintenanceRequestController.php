@@ -167,7 +167,13 @@ class MaintenanceRequestController extends Controller
             'request' => $maintenanceRequest,
             'defaultRoomId' => $roomId,
             'rooms' => Room::query()->orderBy('number')->get(['id', 'number']),
-            'employees' => Employee::query()->active()->orderBy('first_name')->get(['id', 'first_name', 'last_name', 'position']),
+            'employees' => Employee::query()
+                ->where(fn (Builder $query) => $query->active()->when(
+                    $maintenanceRequest?->assigned_to,
+                    fn (Builder $query, int $assigneeId) => $query->orWhere('id', $assigneeId),
+                ))
+                ->orderBy('first_name')
+                ->get(['id', 'first_name', 'last_name', 'position']),
             'statuses' => MaintenanceStatus::options(),
             'priorities' => MaintenancePriority::options(),
         ]);

@@ -43,6 +43,17 @@ it('refuses check-in before a room is assigned', function () {
     expect($reservation->refresh()->status)->toBe(ReservationStatus::Confirmed);
 });
 
+it('refuses to check in a no-show whose stay has already ended', function () {
+    $room = Room::factory()->create();
+    $reservation = Reservation::factory()->forRoom($room)->between('2026-10-01', '2026-10-03')->create();
+
+    $response = $this->actingAs($this->frontDesk)->post(route('admin.reservations.check-in.store', $reservation));
+
+    $response->assertInertiaFlash('error', 'This stay ended on Oct 3, 2026. Edit the dates or cancel it as a no-show.');
+    expect($reservation->refresh()->status)->toBe(ReservationStatus::Confirmed)
+        ->and($room->refresh()->status)->toBe(RoomStatus::Available);
+});
+
 it('refuses check-in before the arrival date', function () {
     $room = Room::factory()->create();
     $reservation = Reservation::factory()->forRoom($room)->between('2026-10-04', '2026-10-05')->create();

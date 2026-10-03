@@ -21,6 +21,7 @@ class CheckInController extends Controller
             ! $reservation->status->isEditable() => 'Only pending or confirmed reservations can be checked in.',
             $reservation->room === null => 'Assign a room before checking the guest in.',
             $reservation->check_in->isAfter(today()) => 'This reservation starts on '.$reservation->check_in->toFormattedDateString().'.',
+            ! $reservation->check_out->isAfter(today()) => 'This stay ended on '.$reservation->check_out->toFormattedDateString().'. Edit the dates or cancel it as a no-show.',
             $reservation->room->status !== RoomStatus::Available => "Room {$reservation->room->number} is not ready ({$reservation->room->status->label()}).",
             default => null,
         };
