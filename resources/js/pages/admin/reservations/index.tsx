@@ -96,7 +96,7 @@ export default function ReservationsIndex({
                                 <Td>
                                     <Link
                                         href={show.url(reservation.id)}
-                                        className="font-mono font-medium text-brand-700 hover:underline"
+                                        className="font-mono font-medium whitespace-nowrap text-brand-700 hover:underline"
                                     >
                                         {reservation.code}
                                     </Link>

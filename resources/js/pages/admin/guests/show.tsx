@@ -100,7 +100,7 @@ export default function GuestShow({
                                             href={reservationShow.url(
                                                 reservation.id,
                                             )}
-                                            className="font-mono font-medium text-brand-700 hover:underline"
+                                            className="font-mono font-medium whitespace-nowrap text-brand-700 hover:underline"
                                         >
                                             {reservation.code}
                                         </Link>

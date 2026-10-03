@@ -329,7 +329,7 @@ export default function Dashboard({
                                                         : request.location}
                                                 </p>
                                             </div>
-                                            <div className="flex gap-1.5">
+                                            <div className="flex flex-wrap justify-end gap-1.5">
                                                 <StatusBadge
                                                     status={request.priority}
                                                 />
@@ -377,7 +377,7 @@ export default function Dashboard({
                                             <p className="text-sm font-medium text-slate-900">
                                                 {item.name}
                                             </p>
-                                            <p className="text-sm text-slate-500">
+                                            <p className="text-right text-sm text-slate-500">
                                                 <span className="font-semibold text-amber-600">
                                                     {item.quantity}
                                                 </span>{' '}
