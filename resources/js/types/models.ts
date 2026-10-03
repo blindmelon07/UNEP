@@ -1,3 +1,13 @@
+export type Hotel = {
+    school: string;
+    department: string;
+    address: string;
+    phone: string;
+    email: string;
+    website: string;
+    motto: string[];
+};
+
 export type Option = { value: string; label: string };
 
 export type Paginated<T> = {

@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'hotel' => config('hotel'),
             'auth' => [
                 'user' => $request->user()?->only(['id', 'name', 'email', 'role']),
                 'modules' => $request->user()?->role->modules() ?? [],

@@ -35,7 +35,7 @@ class RoomTypeRequest extends FormRequest
             'capacity' => ['required', 'integer', 'min:1', 'max:20'],
             'amenities' => ['array'],
             'amenities.*' => ['string', 'max:60'],
-            'image_url' => ['nullable', 'url', 'max:500'],
+            'image_url' => ['nullable', 'string', 'max:500', 'regex:/^(https?:\/\/|\/)\S+$/'],
         ];
     }
 }

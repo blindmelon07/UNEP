@@ -1,45 +1,62 @@
 <?php
 
+use App\Enums\ReservationStatus;
+use App\Models\Employee;
+use App\Models\Guest;
+use App\Models\InventoryItem;
+use App\Models\MaintenanceRequest;
+use App\Models\Reservation;
+use App\Models\Room;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
-it('renders every staff page for an administrator on the demo hotel', function (string $routeName, string $component, array $parameters) {
+it('renders every staff page for an administrator on the demo hotel', function () {
     $this->seed(DatabaseSeeder::class);
     $admin = User::query()->where('email', 'admin@hotel.test')->sole();
+    $checkedOut = Reservation::query()->where('status', ReservationStatus::CheckedOut)->firstOrFail();
+    $upcoming = Reservation::query()->where('status', ReservationStatus::Confirmed)->firstOrFail();
 
-    $response = $this->actingAs($admin)->get(route($routeName, $parameters));
+    $pages = [
+        ['admin.dashboard', [], 'admin/dashboard'],
+        ['admin.reservations.index', [], 'admin/reservations/index'],
+        ['admin.reservations.create', [], 'admin/reservations/create'],
+        ['admin.reservations.show', [$checkedOut], 'admin/reservations/show'],
+        ['admin.reservations.show', [$upcoming], 'admin/reservations/show'],
+        ['admin.reservations.edit', [$upcoming], 'admin/reservations/edit'],
+        ['admin.guests.index', [], 'admin/guests/index'],
+        ['admin.guests.show', [Guest::query()->firstOrFail()], 'admin/guests/show'],
+        ['admin.rooms.index', [], 'admin/rooms/index'],
+        ['admin.rooms.edit', [Room::query()->firstOrFail()], 'admin/rooms/form'],
+        ['admin.room-types.index', [], 'admin/room-types/index'],
+        ['admin.inventory-items.index', [], 'admin/inventory-items/index'],
+        ['admin.inventory-items.show', [InventoryItem::query()->firstOrFail()], 'admin/inventory-items/show'],
+        ['admin.inventory-categories.index', [], 'admin/inventory-categories/index'],
+        ['admin.maintenance-requests.index', [], 'admin/maintenance-requests/index'],
+        ['admin.maintenance-requests.show', [MaintenanceRequest::query()->firstOrFail()], 'admin/maintenance-requests/show'],
+        ['admin.maintenance-requests.create', [], 'admin/maintenance-requests/form'],
+        ['admin.employees.index', [], 'admin/employees/index'],
+        ['admin.employees.show', [Employee::query()->firstOrFail()], 'admin/employees/show'],
+        ['admin.employees.edit', [Employee::query()->firstOrFail()], 'admin/employees/form'],
+        ['admin.departments.index', [], 'admin/departments/index'],
+        ['admin.shifts.index', [], 'admin/shifts/index'],
+        ['admin.users.index', [], 'admin/users/index'],
+    ];
 
-    $response->assertInertia(fn (Assert $page) => $page->component($component));
-})->with([
-    'dashboard' => ['admin.dashboard', 'admin/dashboard', []],
-    'reservations' => ['admin.reservations.index', 'admin/reservations/index', []],
-    'new reservation' => ['admin.reservations.create', 'admin/reservations/create', []],
-    'reservation' => ['admin.reservations.show', 'admin/reservations/show', ['reservation' => 1]],
-    'edit reservation' => ['admin.reservations.edit', 'admin/reservations/edit', ['reservation' => 5]],
-    'guests' => ['admin.guests.index', 'admin/guests/index', []],
-    'guest' => ['admin.guests.show', 'admin/guests/show', ['guest' => 1]],
-    'rooms' => ['admin.rooms.index', 'admin/rooms/index', []],
-    'edit room' => ['admin.rooms.edit', 'admin/rooms/form', ['room' => 1]],
-    'room types' => ['admin.room-types.index', 'admin/room-types/index', []],
-    'stock items' => ['admin.inventory-items.index', 'admin/inventory-items/index', []],
-    'stock item' => ['admin.inventory-items.show', 'admin/inventory-items/show', ['inventory_item' => 1]],
-    'inventory categories' => ['admin.inventory-categories.index', 'admin/inventory-categories/index', []],
-    'work orders' => ['admin.maintenance-requests.index', 'admin/maintenance-requests/index', []],
-    'work order' => ['admin.maintenance-requests.show', 'admin/maintenance-requests/show', ['maintenance_request' => 1]],
-    'new work order' => ['admin.maintenance-requests.create', 'admin/maintenance-requests/form', []],
-    'employees' => ['admin.employees.index', 'admin/employees/index', []],
-    'employee' => ['admin.employees.show', 'admin/employees/show', ['employee' => 1]],
-    'edit employee' => ['admin.employees.edit', 'admin/employees/form', ['employee' => 1]],
-    'departments' => ['admin.departments.index', 'admin/departments/index', []],
-    'shift roster' => ['admin.shifts.index', 'admin/shifts/index', []],
-    'staff accounts' => ['admin.users.index', 'admin/users/index', []],
-]);
+    foreach ($pages as [$routeName, $parameters, $component]) {
+        $this->actingAs($admin)
+            ->get(route($routeName, $parameters))
+            ->assertInertia(fn (Assert $page) => $page->component($component));
+    }
+});
 
 it('renders the public site pages', function () {
     $this->seed(DatabaseSeeder::class);
 
-    $this->get(route('home'))->assertInertia(fn (Assert $page) => $page->component('public/home')->has('roomTypes', 4));
+    $this->get(route('home'))->assertInertia(fn (Assert $page) => $page->component('public/home')
+        ->has('roomTypes', 4)
+        ->where('hotel.school', 'University of Northeastern Philippines')
+        ->where('hotel.department', 'Department of Hospitality & Tourism Management'));
     $this->get(route('booking.index'))->assertInertia(fn (Assert $page) => $page->component('public/booking/search'));
     $this->get(route('login'))->assertInertia(fn (Assert $page) => $page->component('auth/login'));
 });

@@ -11,19 +11,23 @@
 }
 
 @theme {
-    --color-brand-50: #f0f7f6;
-    --color-brand-100: #d9ebe8;
-    --color-brand-200: #b3d6d1;
-    --color-brand-300: #84bab3;
-    --color-brand-400: #579b93;
-    --color-brand-500: #3c7f78;
-    --color-brand-600: #2f6661;
-    --color-brand-700: #285350;
-    --color-brand-800: #234442;
-    --color-brand-900: #1c3533;
-    --color-brand-950: #0f201f;
-    --color-gold-400: #d9b25f;
-    --color-gold-500: #c79a3d;
+    /* UNEP Hospitality & Tourism Management crest: deep green, gold and orange. */
+    --color-brand-50: #effaf3;
+    --color-brand-100: #d8f1e0;
+    --color-brand-200: #b3e2c4;
+    --color-brand-300: #80cc9f;
+    --color-brand-400: #4baf77;
+    --color-brand-500: #2a9259;
+    --color-brand-600: #1b7646;
+    --color-brand-700: #165e39;
+    --color-brand-800: #134b2f;
+    --color-brand-900: #103e28;
+    --color-brand-950: #072316;
+    --color-gold-300: #f7d77f;
+    --color-gold-400: #f2c14e;
+    --color-gold-500: #e3a923;
+    --color-gold-600: #c68a14;
+    --color-ember-500: #e8761b;
 }
 
 body {

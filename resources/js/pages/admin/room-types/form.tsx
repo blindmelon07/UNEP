@@ -106,17 +106,17 @@ export default function RoomTypeForm({
                                 />
                             </Field>
                             <Field
-                                label="Photo URL (optional)"
+                                label="Photo (optional)"
                                 htmlFor="image_url"
                                 error={errors.image_url}
+                                hint="A full https:// link, or a path to a photo in public/, e.g. /images/facility/deluxe-room.jpg"
                                 className="sm:col-span-2"
                             >
                                 <Input
                                     id="image_url"
                                     name="image_url"
-                                    type="url"
                                     defaultValue={roomType?.image_url ?? ''}
-                                    placeholder="https://…"
+                                    placeholder="/images/facility/…"
                                 />
                             </Field>
                             <div className="sm:col-span-2">

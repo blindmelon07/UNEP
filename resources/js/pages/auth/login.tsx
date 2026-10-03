@@ -1,24 +1,33 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { BrandCrest } from '@/components/brand-crest';
 import { Button } from '@/components/ui/button';
 import { Checkbox, Field, Input } from '@/components/ui/form';
 import { home } from '@/routes';
 import { store } from '@/routes/login';
 
 export default function Login() {
-    const { name } = usePage().props;
+    const { name, hotel } = usePage().props;
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-brand-950 px-4 py-12">
+        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-brand-950 px-4 py-12">
             <Head title="Staff login" />
-            <div className="w-full max-w-sm">
+            <img
+                src="/images/facility/lobby-entrance.jpg"
+                alt=""
+                aria-hidden
+                className="absolute inset-0 size-full object-cover opacity-25"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-brand-950/80 to-brand-950" />
+            <div className="relative w-full max-w-sm">
                 <div className="mb-8 text-center">
-                    <span className="mx-auto flex size-12 items-center justify-center rounded-xl bg-gold-500 text-lg font-bold text-brand-950">
-                        H
-                    </span>
+                    <BrandCrest className="mx-auto size-24 rounded-2xl shadow-xl shadow-black/40" />
                     <h1 className="mt-4 text-xl font-semibold text-white">
                         {name}
                     </h1>
                     <p className="mt-1 text-sm text-brand-300">
+                        {hotel.department}
+                    </p>
+                    <p className="mt-3 text-sm text-gold-300">
                         Sign in to the staff portal
                     </p>
                 </div>

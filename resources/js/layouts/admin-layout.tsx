@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import { BrandCrest } from '@/components/brand-crest';
 import { FlashMessages } from '@/components/flash-messages';
 import { humanize } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -175,11 +176,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                     isMenuOpen ? 'translate-x-0' : '-translate-x-full',
                 )}
             >
-                <div className="flex h-16 items-center gap-2.5 border-b border-white/10 px-6">
-                    <span className="flex size-8 items-center justify-center rounded-lg bg-gold-500 text-sm font-bold text-brand-950">
-                        H
-                    </span>
-                    <div className="leading-tight">
+                <div className="flex h-18 items-center gap-3 border-b border-white/10 px-5">
+                    <BrandCrest className="size-10" />
+                    <div className="min-w-0 leading-tight">
                         <p className="text-sm font-semibold text-white">
                             {name}
                         </p>
